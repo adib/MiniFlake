@@ -126,6 +126,17 @@ public class InProcessFlakeMaker : FlakeMaker {
     static var availableInstanceNumbers = IndexSet(integersIn: 0..<Int(FlakeMaker.limitInstanceNumber))
     static let classQueue = DispatchQueue(label: "com.basilsalad.InProcessFlakeMaker")
     
+    /**
+     Returns the number of instances that may still be created
+     */
+    public static var instancesAvailable : Int {
+        get {
+            return classQueue.sync {
+                return availableInstanceNumbers.count
+            }
+        }
+    }
+    
     public init() {
         let starterNumber = Int(arc4random_uniform(UInt32(FlakeMaker.limitInstanceNumber)))
         let ownType = type(of:self)

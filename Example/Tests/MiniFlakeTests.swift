@@ -29,6 +29,8 @@ import XCTest
 
 class MiniFlakeTests: XCTestCase {
     
+    static let flakeMakerLock = DispatchQueue(label: "com.basilsalad.MiniFlakeTests")
+    
     func testSmallSimple() {
         let runCount = 100
         let generator = FlakeMaker(instanceNumber:1)
@@ -94,7 +96,7 @@ class MiniFlakeTests: XCTestCase {
     }
     
     func testMaxInstances() {
-        let maxInstances = FlakeMaker.limitInstanceNumber
+        let maxInstances = InProcessFlakeMaker.instancesAvailable
         var allInstances = Set<InProcessFlakeMaker>()
         allInstances.reserveCapacity(Int(maxInstances))
         
@@ -102,9 +104,9 @@ class MiniFlakeTests: XCTestCase {
             allInstances.update(with: InProcessFlakeMaker())
         }
         XCTAssertEqual(allInstances.count, Int(maxInstances), "Instance numbers overlap")
-        XCTAssertEqual(InProcessFlakeMaker.availableInstanceNumbers.count, 0, "Unit test should exhaust instance numbers")
+        XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 0, "Unit test should exhaust instance numbers")
         allInstances.removeFirst()
-        XCTAssertEqual(InProcessFlakeMaker.availableInstanceNumbers.count, 1, "Object destruction should make one instance number available")
+        XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 1, "Object destruction should make one instance number available")
         let generator = InProcessFlakeMaker()
         allInstances.update(with: generator)
         let generatedValue = generator.nextValue()
