@@ -49,7 +49,7 @@ The identifier is inspired by Twitter’s Snowflake ID generator, in which each 
 2. 10 bits generator instance identifier.
 3. 12 bits sequence number.
 
-The timestamp occupies the more significant bits. With 41 bits it would be good for over 178 years before wrapping around. The custom epoch is 1 January 2018, hence the identifier  won’t wrap around until the year 2196. Even then it would still work but generates negative values instead, hence easily detectable and fixable.
+The timestamp occupies the more significant bits. With 41 bits it would be good for over 178 years before wrapping around. The custom epoch is 1 March 2018, hence the identifier  won’t wrap around until the year 2196. Even then it would still work but generates negative values instead, hence easily detectable and fixable.
 
 With 12 bits available for the sequence number, each worker can generate **over four thousand unique values per millisecond**. Because it can count up to 4095 per millisecond, there’s much less likely to have an ID clash as opposed to using a plain Unix timestamp as an ID generator. Moreover an overflow in this field would get passed on to the timestamp field, hence the generator would still create valid values.
 
