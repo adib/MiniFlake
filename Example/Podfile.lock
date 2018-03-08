@@ -1,0 +1,16 @@
+PODS:
+  - MiniFlake (1.0.0)
+
+DEPENDENCIES:
+  - MiniFlake (from `../`)
+
+EXTERNAL SOURCES:
+  MiniFlake:
+    :path: ../
+
+SPEC CHECKSUMS:
+  MiniFlake: 12c18ad5fcc63a1a2ea5a48526a51efb7996eafd
+
+PODFILE CHECKSUM: 7b5643eb1ba6d3e1d823df70caf370669570ffce
+
+COCOAPODS: 1.4.0

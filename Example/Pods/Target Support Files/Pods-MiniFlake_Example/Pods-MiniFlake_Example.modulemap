@@ -1,0 +1,6 @@
+framework module Pods_MiniFlake_Example {
+  umbrella header "Pods-MiniFlake_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

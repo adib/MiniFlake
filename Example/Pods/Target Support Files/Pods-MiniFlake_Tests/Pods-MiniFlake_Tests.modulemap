@@ -1,0 +1,6 @@
+framework module Pods_MiniFlake_Tests {
+  umbrella header "Pods-MiniFlake_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

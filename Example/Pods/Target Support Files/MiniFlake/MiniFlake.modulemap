@@ -1,0 +1,6 @@
+framework module MiniFlake {
+  umbrella header "MiniFlake-umbrella.h"
+
+  export *
+  module * { export * }
+}

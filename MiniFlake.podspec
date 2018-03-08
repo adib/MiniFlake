@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MiniFlake'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of MiniFlake.'
+  s.version          = '1.0.0'
+  s.summary          = 'Generates k-ordered identifiers as positive 64-bit integers without synchronization.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,18 +18,21 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+    A Swift micro-framework for generating compact identifiers that are time ordered in distributed systems without the need for synchronization.
                        DESC
 
-  s.homepage         = 'https://github.com/adib@clovermail.net/MiniFlake'
+  s.homepage         = 'https://github.com/adib/MiniFlake.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'adib@clovermail.net' => 'adib@basil-salad.com' }
+  s.license          = { :type => 'MIT', :file => 'LICENSE.markdown' }
+  s.authors          = { 'Sasmito Adibowo' => 'adib@basil-salad.com' }
   s.source           = { :git => 'https://github.com/adib@clovermail.net/MiniFlake.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.social_media_url = 'https://twitter.com/cutecoder'
 
-  s.platform = :osx
-  s.osx.deployment_target = "10.10"
+  s.swift_version = '4.0'
+  s.osx.deployment_target = "10.12"
+  s.ios.deployment_target = "10.3"
+  s.tvos.deployment_target = "10.2"
+  s.watchos.deployment_target = "3.2"
 
   s.source_files = 'MiniFlake/Classes/**/*'
 
@@ -39,5 +42,6 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'Cocoa'
+  s.weak_framework = 'CoreData'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
