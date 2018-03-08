@@ -28,9 +28,7 @@ import XCTest
 @testable import MiniFlake
 
 class MiniFlakeTests: XCTestCase {
-    
-    static let flakeMakerLock = DispatchQueue(label: "com.basilsalad.MiniFlakeTests")
-    
+        
     func testSmallSimple() {
         let runCount = 100
         let generator = FlakeMaker(instanceNumber:1)
