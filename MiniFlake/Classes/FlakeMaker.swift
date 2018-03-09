@@ -137,6 +137,10 @@ public class InProcessFlakeMaker : FlakeMaker {
         }
     }
     
+    override private init(instanceNumber: Int) {
+        fatalError("Do not specify instance number when constructing InProcessFlakeMaker")
+    }
+    
     public init() {
         let starterNumber = Int(arc4random_uniform(UInt32(FlakeMaker.limitInstanceNumber)))
         let ownType = type(of:self)
