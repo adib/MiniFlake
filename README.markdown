@@ -20,13 +20,10 @@ A Swift micro-framework for generating compact identifiers that are time ordered
 - Should also function pretty good in collaborative multi-device and multi-user scenarios with less than four million concurrent users.
 - Works great as server-side ID generators, even distributed systems environments.
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 ## Compatibility
 
-- Swift 4.x
+- Xcode 9.2
+- Swift 4.0
 - macOS 10.12+
 - iOS 10.3+
 - tvOS 10.2+
@@ -100,6 +97,10 @@ Generic identifier creation:
 ```Objective-C
 int64_t generatedID = [NSThread.currentThread nextFlakeID];
 ```
+
+## Example
+
+Open `MiniFlake.xcworkspace` from the `Example` folder and run the `MiniFlake_Example.app` target using Xcode. This is a Mac app that generates an amount of identifiers into a text view, ready for copy-pasting. The main functionality that calls the library is inside the class `ViewController`, method `startGenerate()`.
 
 
 ## How it works
