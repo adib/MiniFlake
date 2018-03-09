@@ -82,7 +82,7 @@ Importing into Objective-C source file:
 #import <MiniFlake/MiniFlake-Swift.h>
 ```
 
-Setup of Core Data Object:
+Setup of Core Data object:
 
 ```Objective-C
 -(void) awakeFromInsert {
