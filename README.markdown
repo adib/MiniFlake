@@ -41,6 +41,67 @@ it, simply add the following line to your Podfile:
 pod 'MiniFlake'
 ```
 
+## Usage
+
+First  import the library in the top of your source file:
+
+```Swift
+import MiniFlake
+```
+
+### Core Data
+
+In your `NSManagedObject` subclass, override `awakeFromInsert` and use MiniFlake's `NSManagedObjectContext` extension method `nextFlakeID` to pre-populate your object's identifier. You would need to have an indexed attribute of type `Int64` as this identifier.
+
+```Swift
+override func awakeFromInsert() {
+    super.awakeFromInsert()
+    self.primitiveIdentifierValue = self.managedObjectContext!.nextFlakeID()
+    // ... continue initialization ...
+}
+```
+
+### Other Entity Types
+
+The `nextFlakeID` method is also available as an extension to `Thread`. You can use this to generate identifiers for your custom persistence objects.
+
+```Swift
+let generatedID = Thread.current.nextFlakeID()
+```
+
+**Always** use `Thread.current` and do not call the method for another thread object since ID generation is not thread-safe.
+
+### Advanced Uses
+
+The primary classes are `FlakeMaker` and `InProcessFlakeMaker`. The former requires you to provide a unique instance number whereas the latter will manage these instance numbers for you. Note that instance numbers are 10-bit values, hence there cannot be more than 1024 generator instances at any given moment or the identifiers may overlap.  Call method `nextValue()` on objects of both classes to generate ID values.
+
+### Objective-C
+
+The `nextFlakeID` extension methods are available to call from Objective-C sources, which should cover most use cases. However the `FlakeMaker` and `InProcessFlakeMaker` classes are Swift-only.
+
+Importing into Objective-C source file:
+
+```Objective-C
+#import <MiniFlake/MiniFlake-Swift.h>
+```
+
+Setup of Core Data Object:
+
+```Objective-C
+-(void) awakeFromInsert {
+    [super awakeFromInsert];
+    self.primitiveIdentifierValue = [self.managedObjectContext nextFlakeID];
+    // ... continue initialization ...
+}
+```
+
+Generic identifier creation:
+
+```Objective-C
+int64_t generatedID = [NSThread.currentThread nextFlakeID];
+```
+
+
 ## How it works
 
 The identifier is inspired by Twitter’s Snowflake ID generator, in which each identifier value is composed by the following components.
