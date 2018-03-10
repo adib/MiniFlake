@@ -28,8 +28,8 @@ import Foundation
 /**
  Generates a 63 bit integers for use in database primary keys. The value is k-ordered by time and has the following layout:
  - 41 bits timestamp with custom epoch
- - 10 bits instance ID
  - 12 bits sequence number
+ - 10 bits instance ID
  */
 public class FlakeMaker {
     
@@ -87,11 +87,11 @@ public class FlakeMaker {
         
         /*
          Value is
-          - 41 bits timestamp with custom epoch
-          - 10 bits instance ID
-          - 12 bits sequence number
+         - 41 bits timestamp with custom epoch
+         - 12 bits sequence number
+         - 10 bits instance ID
          */
-        return (generateTime << 22) | Int64((instanceNumber & (FlakeMaker.limitInstanceNumber-1)) << 12) | Int64(sequenceNumber & 0xFFF)
+        return (generateTime << 22) | (Int64(sequenceNumber & 0xFFF) << 10) | Int64(instanceNumber & (FlakeMaker.limitInstanceNumber-1))
     }
 }
 

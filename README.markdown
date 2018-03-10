@@ -117,8 +117,9 @@ Open `MiniFlake.xcworkspace` from the `Example` folder and run the `MiniFlake_Ex
 The identifier is inspired by Twitter’s Snowflake ID generator, in which each identifier value is composed by the following components.
 
 1. 41 bits timestamp, millisecond precision with a custom epoch.
-2. 10 bits generator instance identifier.
-3. 12 bits sequence number.
+2. 12 bits sequence number.
+3. 10 bits generator instance identifier.
+
 
 The timestamp occupies the more significant bits. With 41 bits it would be good for over 178 years before wrapping around. The custom epoch is 1 March 2018, hence the identifier  won’t wrap around until the year 2196. Even then it would still work but generates negative values instead, hence easily detectable and fixable.
 
