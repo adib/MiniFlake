@@ -72,6 +72,15 @@ let generatedID = Thread.current.nextFlakeID()
 
 The primary classes are `FlakeMaker` and `InProcessFlakeMaker`. The former requires you to provide a unique instance number whereas the latter will manage these instance numbers for you. Note that instance numbers are 10-bit values, hence there cannot be more than 1024 generator instances at any given moment or the identifiers may overlap.  Call method `nextValue()` on objects of both classes to generate ID values.
 
+```Swift
+let generator = InProcessFlakeMaker()
+let runCount = 100
+var results = Set<Int64>(minimumCapacity:runCount)
+for _ in 0..<runCount {
+    results.insert(generator.nextValue())
+}
+```
+
 ### Objective-C
 
 The `nextFlakeID` extension methods are available to call from Objective-C sources, which should cover most use cases. However the `FlakeMaker` and `InProcessFlakeMaker` classes are Swift-only.
