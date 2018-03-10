@@ -28,7 +28,9 @@ import XCTest
 @testable import MiniFlake
 
 class MiniFlakeTests: XCTestCase {
-        
+    
+    static let inProcessFlakeMakerLock = DispatchQueue(label:"com.basilsalad.MiniFlakeTests")
+    
     func testSmallSimple() {
         let runCount = 100
         let generator = FlakeMaker(instanceNumber:1)
@@ -82,7 +84,7 @@ class MiniFlakeTests: XCTestCase {
     
     func testPerformanceOneMillion() {
         let runCount = 1_000_000
-        let gen = InProcessFlakeMaker()
+        let gen = FlakeMaker(instanceNumber: 3)
         self.measure {
             for _ in 0..<runCount {
                 _ = gen.nextValue()
@@ -91,34 +93,43 @@ class MiniFlakeTests: XCTestCase {
     }
     
     func testSameThread() {
-        let obj1 = InProcessFlakeMaker.flakeMaker(thread: Thread.current)
-        let obj2 = InProcessFlakeMaker.flakeMaker(thread: Thread.current)
-        XCTAssertTrue(obj1 === obj2, "Thread storage data failed")
+        let myClass = type(of:self)
+        myClass.inProcessFlakeMakerLock.sync {
+            let obj1 = InProcessFlakeMaker.flakeMaker(thread: Thread.current)
+            let obj2 = InProcessFlakeMaker.flakeMaker(thread: Thread.current)
+            XCTAssertTrue(obj1 === obj2, "Thread storage data failed")
+        }
     }
     
     func testSameManagedObjectContext() {
         let ctx = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        let obj1 = InProcessFlakeMaker.flakeMaker(managedObjectContext: ctx)
-        let obj2 = InProcessFlakeMaker.flakeMaker(managedObjectContext: ctx)
-        XCTAssertTrue(obj1 === obj2, "Core Data Context storage failed")
+        let myClass = type(of:self)
+        myClass.inProcessFlakeMakerLock.sync {
+            let obj1 = InProcessFlakeMaker.flakeMaker(managedObjectContext: ctx)
+            let obj2 = InProcessFlakeMaker.flakeMaker(managedObjectContext: ctx)
+            XCTAssertTrue(obj1 === obj2, "Core Data Context storage failed")
+        }
     }
     
     func testMaxInstances() {
-        let maxInstances = InProcessFlakeMaker.instancesAvailable
-        var allInstances = Set<InProcessFlakeMaker>()
-        allInstances.reserveCapacity(Int(maxInstances))
-        
-        for _ in 0..<maxInstances {
-            allInstances.update(with: InProcessFlakeMaker())
+        let myClass = type(of:self)
+        myClass.inProcessFlakeMakerLock.sync {
+            let maxInstances = InProcessFlakeMaker.instancesAvailable
+            var allInstances = Set<InProcessFlakeMaker>()
+            allInstances.reserveCapacity(Int(maxInstances))
+            
+            for _ in 0..<maxInstances {
+                allInstances.update(with: InProcessFlakeMaker())
+            }
+            XCTAssertEqual(allInstances.count, Int(maxInstances), "Instance numbers overlap")
+            XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 0, "Unit test should exhaust instance numbers")
+            allInstances.removeFirst()
+            XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 1, "Object destruction should make one instance number available")
+            let generator = InProcessFlakeMaker()
+            allInstances.update(with: generator)
+            let generatedValue = generator.nextValue()
+            XCTAssertGreaterThan(generatedValue, 0, "Invalid Generated value")
         }
-        XCTAssertEqual(allInstances.count, Int(maxInstances), "Instance numbers overlap")
-        XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 0, "Unit test should exhaust instance numbers")
-        allInstances.removeFirst()
-        XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 1, "Object destruction should make one instance number available")
-        let generator = InProcessFlakeMaker()
-        allInstances.update(with: generator)
-        let generatedValue = generator.nextValue()
-        XCTAssertGreaterThan(generatedValue, 0, "Invalid Generated value")
     }
     
 }
