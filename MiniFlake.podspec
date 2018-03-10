@@ -7,7 +7,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'MiniFlake'
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   s.summary          = 'Generates time-ordered identifiers as positive 64-bit integers without synchronization.'
 
   s.description      = <<-DESC
