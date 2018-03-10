@@ -45,8 +45,8 @@ class MiniFlakeTests: XCTestCase {
     /**
      Test generate a two million IDs from two different threads and ensure they're unique.
      */
-    func testOneMillion() {
-        let runCount = 10000000
+    func testTwoMillion() {
+        let runCount = 1_000_000
         let gen1 = FlakeMaker(instanceNumber: 1)
         let gen2 = FlakeMaker(instanceNumber: 2)
         var mergedResults = Set<Int64>(minimumCapacity:runCount*2)
@@ -80,6 +80,16 @@ class MiniFlakeTests: XCTestCase {
         XCTAssertEqual(mergedResults.count, runCount * 2, "Unexpected result count")
     }
     
+    func testPerformanceOneMillion() {
+        let runCount = 1_000_000
+        let gen = InProcessFlakeMaker()
+        self.measure {
+            for _ in 0..<runCount {
+                _ = gen.nextValue()
+            }
+        }
+    }
+    
     func testSameThread() {
         let obj1 = InProcessFlakeMaker.flakeMaker(thread: Thread.current)
         let obj2 = InProcessFlakeMaker.flakeMaker(thread: Thread.current)
@@ -110,4 +120,5 @@ class MiniFlakeTests: XCTestCase {
         let generatedValue = generator.nextValue()
         XCTAssertGreaterThan(generatedValue, 0, "Invalid Generated value")
     }
+    
 }
