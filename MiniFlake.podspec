@@ -8,10 +8,11 @@
 Pod::Spec.new do |s|
   s.name             = 'MiniFlake'
   s.version          = '0.0.3'
-  s.summary          = 'Generates k-ordered identifiers as positive 64-bit integers without synchronization.'
+  s.summary          = 'Generates time-ordered identifiers as positive 64-bit integers without synchronization.'
 
   s.description      = <<-DESC
-    A Swift micro-framework for generating compact identifiers that are time ordered in distributed systems without the need for synchronization.
+    A Swift micro-framework for generating compact identifiers that are time ordered without the need for synchronization. Unlike UUID-based methods, the identifiers would only be 63-bits long — hence fit as a positive number in a 64-bit integer. These identifiers are also roughly time-ordered, hence can be used as a sorting attribute to get the corresponding data objects sorted by time as well.
+    Inspired from Twitter Snowflake identifier-creation algorithm.
                        DESC
 
   s.homepage         = 'https://github.com/adib/MiniFlake.git'
