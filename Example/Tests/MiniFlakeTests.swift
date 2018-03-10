@@ -119,17 +119,16 @@ class MiniFlakeTests: XCTestCase {
             allInstances.reserveCapacity(Int(maxInstances))
             
             for _ in 0..<maxInstances {
-                allInstances.update(with: InProcessFlakeMaker())
+                allInstances.update(with: InProcessFlakeMaker()!)
             }
             XCTAssertEqual(allInstances.count, Int(maxInstances), "Instance numbers overlap")
             XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 0, "Unit test should exhaust instance numbers")
             allInstances.removeFirst()
             XCTAssertEqual(InProcessFlakeMaker.instancesAvailable, 1, "Object destruction should make one instance number available")
-            let generator = InProcessFlakeMaker()
+            let generator = InProcessFlakeMaker()!
             allInstances.update(with: generator)
             let generatedValue = generator.nextValue()
             XCTAssertGreaterThan(generatedValue, 0, "Invalid Generated value")
         }
     }
-    
 }

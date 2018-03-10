@@ -35,7 +35,7 @@ extension InProcessFlakeMaker {
         if let maker = userInfo[objectName] as? InProcessFlakeMaker {
             return maker
         }
-        let fm = InProcessFlakeMaker()
+        let fm = InProcessFlakeMaker()!
         userInfo[objectName] = fm
         return fm
     }

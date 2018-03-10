@@ -141,21 +141,28 @@ public class InProcessFlakeMaker : FlakeMaker {
         fatalError("Do not specify instance number when constructing InProcessFlakeMaker")
     }
     
-    public init() {
+    /**
+     Creates a generator instance with randomly-selected instance number.
+     This would fail if there are no more instance numbers left (there are a global limit of 1024 instance numbers
+     available at any given time.
+     */
+    public init?() {
         let starterNumber = Int(arc4random_uniform(UInt32(FlakeMaker.limitInstanceNumber)))
         let ownType = type(of:self)
-        super.init(instanceNumber:
-            ownType.classQueue.sync {
-                guard let instanceNumber = (
-                        ownType.availableInstanceNumbers.integerLessThanOrEqualTo(starterNumber) ??
-                        ownType.availableInstanceNumbers.integerGreaterThan(starterNumber)
-                    ) else {
-                    fatalError("InProcessFlakeMaker ran out of instance numbers.")
-                }
-                ownType.availableInstanceNumbers.remove(instanceNumber)
-                return instanceNumber
+        guard let num = ownType.classQueue.sync(execute:{
+            () -> Int? in
+            guard let selectedNum = (
+                    ownType.availableInstanceNumbers.integerLessThanOrEqualTo(starterNumber) ??
+                    ownType.availableInstanceNumbers.integerGreaterThan(starterNumber)
+                ) else {
+                    return nil
             }
-        )
+            ownType.availableInstanceNumbers.remove(selectedNum)
+            return selectedNum
+        }) else {
+            return nil
+        }
+        super.init(instanceNumber:num)
     }
     
     deinit {
@@ -176,7 +183,7 @@ public class InProcessFlakeMaker : FlakeMaker {
         if let existingFlakeMaker = threadDict[objectName] as? InProcessFlakeMaker {
             return existingFlakeMaker
         }
-        let fm = InProcessFlakeMaker()
+        let fm = InProcessFlakeMaker()!
         threadDict[objectName] = fm
         return fm
     }
