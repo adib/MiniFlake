@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/MiniFlake.svg?style=flat)](http://cocoapods.org/pods/MiniFlake)
 [![Platform](https://img.shields.io/cocoapods/p/MiniFlake.svg?style=flat)](http://cocoapods.org/pods/MiniFlake)
 
-A Swift micro-framework for generating compact identifiers that are time ordered in without the need for synchronization.
+A Swift micro-framework for generating compact identifiers that are time ordered without the need for synchronization.
 
 ## Purpose
 
